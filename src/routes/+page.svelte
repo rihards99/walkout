@@ -11,19 +11,15 @@
 
 <section>
 	<h1>
-		<span class="welcome">
+		<!-- <span class="welcome">
 			<picture>
 				<source srcset={welcome} type="image/webp" />
 				<img src={welcome_fallback} alt="Welcome" />
 			</picture>
-		</span>
+		</span> -->
 
-		to your new<br />SvelteKit app
+		Hello world
 	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
 
 	<Counter />
 </section>
