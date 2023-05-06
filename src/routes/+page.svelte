@@ -1,55 +1,57 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+	import { onMount } from 'svelte'
+	import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
+	import 'mapbox-gl/dist/mapbox-gl.css';
+	
+	let map;
+
+	onMount(async () => {
+		console.log("asdasdad");
+		console.log("🚀 ~ mapboxgl:", mapboxgl);
+		mapboxgl.accessToken = 'pk.eyJ1IjoicmloYXJkczk5IiwiYSI6ImNsaDgxd3FpNDA0OXIzZHBud3NscW1mZmwifQ.Y0eOT5mYDmj8-eRD3_jG7A';
+		map = new mapboxgl.Map({
+			container: 'map',
+			// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+			style: 'mapbox://styles/mapbox/streets-v12',
+			center: [24.1056, 56.9677],
+			zoom: 16
+		});
+
+		map.addControl(
+			new mapboxgl.GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true
+				},
+				// When active the map will receive updates to the device's location as it changes.
+				trackUserLocation: true,
+				// Draw an arrow next to the location dot to indicate which direction the device is heading.
+				showUserHeading: true
+			})
+		);
+	})
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
-
-<section>
-	<h1>
-		<!-- <span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span> -->
-
-		Hello world
-	</h1>
-
-	<Counter />
-</section>
+<main>
+	<div id="map"></div>
+</main>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
+	:global(body) {
+		margin: 0;
 	}
 
-	h1 {
-		width: 100%;
-	}
+	main {
+    text-align: center;
+    max-width: 240px;
+  }
 
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
 
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
+	#map {
+		height: 100vh
 	}
 </style>
