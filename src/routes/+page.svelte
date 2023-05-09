@@ -1,38 +1,30 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte'
-	import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 	import 'mapbox-gl/dist/mapbox-gl.css';
-	
-	let map;
+
+	import { mapStore, initMap } from '../stores/mapStore';
+	import { addMarker } from '../stores/markersStore';
+	import { locationStore, initLocation } from '../stores/locationStore';
+	import Ui from '../components/Ui.svelte'
+	import { saveGame } from '../util/localState';
+
+	const buildMine = () => {
+		addMarker($locationStore);
+	}
 
 	onMount(async () => {
-		console.log("asdasdad");
-		console.log("🚀 ~ mapboxgl:", mapboxgl);
-		mapboxgl.accessToken = 'pk.eyJ1IjoicmloYXJkczk5IiwiYSI6ImNsaDgxd3FpNDA0OXIzZHBud3NscW1mZmwifQ.Y0eOT5mYDmj8-eRD3_jG7A';
-		map = new mapboxgl.Map({
-			container: 'map',
-			// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-			style: 'mapbox://styles/mapbox/streets-v12',
-			center: [24.1056, 56.9677],
-			zoom: 16
-		});
-
-		map.addControl(
-			new mapboxgl.GeolocateControl({
-				positionOptions: {
-					enableHighAccuracy: true
-				},
-				// When active the map will receive updates to the device's location as it changes.
-				trackUserLocation: true,
-				// Draw an arrow next to the location dot to indicate which direction the device is heading.
-				showUserHeading: true
-			})
-		);
+		initLocation();
+		initMap();
 	})
 </script>
 
 <main>
 	<div id="map"></div>
+
+	<Ui>
+		<button on:click={buildMine}>Build mine</button>
+		<button on:click={saveGame}>Save game</button>
+	</Ui>
 </main>
 
 <style>
@@ -51,6 +43,7 @@
   }
 
 	#map {
-		height: 100vh
+		min-height: 90vh;
+		/* min-height: -webkit-fill-available; */
 	}
 </style>
