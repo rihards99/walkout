@@ -7,8 +7,11 @@ import { mapStore } from "../stores/mapStore";
 // Load game
 mapStore.subscribe((map) => {
   if (!!map) {
-    const state = JSON.parse(localStorage.getItem("gameState") || '{}') as State;
-    addMarkers(state.markers);
+    const stateString = localStorage.getItem("gameState")
+    if (stateString) {
+      const state = JSON.parse(stateString) as State;
+      addMarkers(state.markers);
+    }
   }
 })
 

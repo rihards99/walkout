@@ -12,6 +12,10 @@
 		addMarker($locationStore);
 	}
 
+	const clearSave = () => {
+		localStorage.removeItem("gameState");
+	}
+
 	onMount(async () => {
 		initLocation();
 		initMap();
@@ -22,8 +26,9 @@
 	<div id="map"></div>
 
 	<Ui>
-		<button on:click={buildMine}>Build mine</button>
-		<button on:click={saveGame}>Save game</button>
+		<button on:click={buildMine}>Build Mine</button>
+		<button on:click={saveGame}>Save Game</button>
+		<button on:click={clearSave}>Clear Save</button>
 	</Ui>
 </main>
 
