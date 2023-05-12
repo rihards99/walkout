@@ -8,4 +8,11 @@ export type State = {
     lng: number,
     lat: number,
   }>
+  resources: Resources,
+}
+
+export type Resources = {
+  lumber: number;
+  gold: number;
+  mana: number;
 }

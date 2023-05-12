@@ -1,5 +1,6 @@
 <div class="ui">
   <slot></slot>
+  <div class="hiddenPlaceholder"></div>
 </div>
 
 <svelte:head>
@@ -12,7 +13,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 90vh;
   pointer-events: none;
 }
 
@@ -20,5 +21,9 @@
   pointer-events: auto;
   font-family: 'Skranji', cursive;
   padding: 10px;
+}
+
+.hiddenPlaceholder {
+  display: none;
 }
 </style>
