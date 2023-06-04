@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
-import type { Resources } from 'src/util/types';
+import type { Resources, ResourceType } from 'src/util/types';
 
-export const addResource = (resourceType: keyof Resources, amount: number) => {
+export const addResource = (resourceType: ResourceType, amount: number) => {
   resourcesStore.update((resources) => {
     console.log("🚀 ~ resources:", resources);
     resources[resourceType] += amount;
@@ -10,7 +10,7 @@ export const addResource = (resourceType: keyof Resources, amount: number) => {
   })
 }
 
-export const spendResource = (resourceType: keyof Resources, amount: number) => {
+export const spendResource = (resourceType: ResourceType, amount: number) => {
   resourcesStore.update((resources) => {
     console.log("🚀 ~ resources:", resources);
     resources[resourceType] -= amount;

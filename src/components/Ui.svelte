@@ -14,13 +14,13 @@
   left: 0;
   width: 100%;
   height: 90vh;
-  pointer-events: none;
+  pointer-events: none; 
 }
 
-:global(.ui > *) {
+:global(.ui *) {
   pointer-events: auto;
-  font-family: 'Skranji', cursive;
   padding: 10px;
+  font-family: 'Skranji', cursive;
 }
 
 .hiddenPlaceholder {
