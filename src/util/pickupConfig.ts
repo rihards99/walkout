@@ -16,41 +16,31 @@ type PickupConfig = {
   }
 };
 
+const onResourcePickup = (id: string, resourceType: ResourceType) => {
+  const pickup = get(pickupStore).find(p => p.id == id)
+  console.log("🚀 ~ pickup:", pickup);
+  
+  if (pickup) {
+    if (!isPointInRange(pickup.coords)) {
+      alert("Pickup out of range");
+      return;
+    }
+    addResource(resourceType, 1);
+    pickupStore.update(pickups => pickups.filter(p => p.id !== id));
+  }
+}
+
 export const PICKUPS: PickupConfig = {
   [PickupType.Lumber]: {
-    onPickup: (id: string) => {
-      const pickup = get(pickupStore).find(p => p.id == id)
-      console.log("🚀 ~ pickup:", pickup);
-      
-      if (pickup && isPointInRange(pickup.coords)) {
-        addResource(ResourceType.Lumber, 1);
-        pickupStore.update(pickups => pickups.filter(p => p.id !== id));
-      }
-    },
+    onPickup: (id: string) => onResourcePickup(id, ResourceType.Lumber),
     icon: logImage
   },
   [PickupType.Gold]: {
-    onPickup: (id: string) => {
-      const pickup = get(pickupStore).find(p => p.id == id)
-      console.log("🚀 ~ pickup:", pickup);
-      
-      if (pickup && isPointInRange(pickup.coords)) {
-        addResource(ResourceType.Gold, 1);
-        pickupStore.update(pickups => pickups.filter(p => p.id !== id));
-      }
-    },
+    onPickup: (id: string) => onResourcePickup(id, ResourceType.Gold),
     icon: goldImage
   },
   [PickupType.Mana]: {
-    onPickup: (id: string) => {
-      const pickup = get(pickupStore).find(p => p.id == id)
-      console.log("🚀 ~ pickup:", pickup);
-      
-      if (pickup && isPointInRange(pickup.coords)) {
-        addResource(ResourceType.Mana, 1);
-        pickupStore.update(pickups => pickups.filter(p => p.id !== id));
-      }
-    },
+    onPickup: (id: string) => onResourcePickup(id, ResourceType.Mana),
     icon: manaImage
   }
 }

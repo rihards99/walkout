@@ -5,6 +5,8 @@ import { locationStore } from '../stores/locationStore';
 import { PickupType, SkillType } from "./types";
 import { randomElement } from './util';
 import { createPickup } from '../stores/pickupStore';
+import { mapStore } from '../stores/mapStore';
+import type { Map } from 'mapbox-gl';
 
 type SkillConfig = {
   [key in SkillType]: {
@@ -39,6 +41,11 @@ export const SKILLS: SkillConfig = {
         const randomPoint = randomPosition([lng - degrees, lat - degrees, lng + degrees, lat + degrees])
         const type = randomElement(typeDistribution);
         createPickup({lat: randomPoint[1]!, lng: randomPoint[0]!}, type);
+      }
+
+      const map = (get(mapStore) as unknown) as Map;
+      if (map) {
+        map.flyTo({center: [lng, lat], zoom: 12});
       }
     },
     cooldown: daysToSeconds(1)

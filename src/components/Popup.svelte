@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { BUILDINGS } from '../util/buildingConfig';
-	import { harvestBuilding } from '../stores/buildingStore';
-  import { BuildingType, type Building } from '../util/types';
+	import { harvestBuilding } from '../util/buildingConfig';
+  import type { Building } from '../util/types';
 
   export let building: Building;
 
@@ -25,7 +25,7 @@
 </script>
 
 <p class=popup>
-  Lumberyard<br/>
+  {BUILDINGS[building.type].title}<br/>
 
   {#if canHarvest}
     <button on:click={onClick}>HARVEST</button>

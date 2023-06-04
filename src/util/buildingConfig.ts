@@ -1,17 +1,19 @@
 import { get } from "svelte/store";
 import { addBuilding, buildingsStore } from "../stores/buildingStore";
 import { BuildingType, ResourceType, type Point } from "./types"
-import { resourcesStore, spendResource } from "../stores/resourcesStore";
-import { distanceBetweenInKm } from "./util";
+import { addResource, resourcesStore, spendResource } from "../stores/resourcesStore";
+import { distanceBetweenInKm, getCurrentTimestamp } from "./util";
 
 type BuildingConfig = {
   [key in BuildingType]: {
+    title: string,
     color: string,
     cost: {
       resource: ResourceType,
       amount: number,
     }[]
     cooldown: number,
+    harvestResource?: ResourceType,
   }
 };
 
@@ -35,28 +37,48 @@ export const build = (coords: Point, buildingType: BuildingType) => {
 
   if (hasEnoughResourcesToBuild(buildingType)) {
     BUILDINGS[buildingType].cost.forEach(cost => spendResource(cost.resource, cost.amount))
-    addBuilding(coords, BuildingType.LumberMill)
+    addBuilding(coords, buildingType)
   }
+}
+
+export const harvestBuilding = (buildingId: string) => {
+  console.log("HARVEST ", buildingId);
+  const buildings = get(buildingsStore)
+  const building = buildings.find(b => b.id === buildingId);
+
+  if (building && BUILDINGS[building.type].harvestResource) {
+    addResource(BUILDINGS[building.type].harvestResource!, 1);
+    building.timeSinceLastHarvest = getCurrentTimestamp();
+    buildingsStore.update(() => [...buildings]);
+    return true;
+  }
+
+  return false;
 }
 
 export const BUILDINGS: BuildingConfig = {
   [BuildingType.LumberMill]: {
+    title: 'Lumberyard',
     color: 'rgb(150,205,150)',
     cost: [{
       resource: ResourceType.Lumber,
       amount: 5
     }],
-    cooldown: 300
+    cooldown: 7200, // 2 hours
+    harvestResource: ResourceType.Lumber,
   },
   [BuildingType.GoldMine]: {
-    color: 'rgb(100,255,255)',
+    title: 'Gold Mine',
+    color: 'rgb(205,205,100)',
     cost: [{
       resource: ResourceType.Gold,
       amount: 5
     }],
-    cooldown: 300
+    cooldown: 7200, // 2 hours
+    harvestResource: ResourceType.Gold,
   },
   [BuildingType.ManaWell]: {
+    title: 'Mana Well',
     color: 'rgb(100,100,255)',
     cost: [{
       resource: ResourceType.Lumber,
@@ -65,6 +87,7 @@ export const BUILDINGS: BuildingConfig = {
       resource: ResourceType.Gold,
       amount: 20
     }],
-    cooldown: 3000
+    cooldown: 86400, // 24 hours
+    harvestResource: ResourceType.Mana,
   }
 }
