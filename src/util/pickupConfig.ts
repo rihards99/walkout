@@ -8,7 +8,6 @@ import { addResource } from "../stores/resourcesStore";
 import { pickupStore } from "../stores/pickupStore";
 import { isPointInRange } from './util';
 
-// Make the keys comply to BuildingType
 type PickupConfig = {
   [key in PickupType]: {
     icon: string,
