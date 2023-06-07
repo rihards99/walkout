@@ -90,7 +90,7 @@
 		bind:this={mapComponent}
 		accessToken="pk.eyJ1IjoicmloYXJkczk5IiwiYSI6ImNsaDgxd3FpNDA0OXIzZHBud3NscW1mZmwifQ.Y0eOT5mYDmj8-eRD3_jG7A"
 		version="v2.14.1"
-		style="mapbox://styles/mapbox/streets-v12"
+		style="mapbox://styles/rihards99/clilwmjs2004x01o3bg5ahzuc"
 		zoom="1"
 		on:ready={onMapReady}
 	>
@@ -151,7 +151,7 @@
 			<button on:click={clearSave}>Clear Save</button>
 		</div>
 		<div class="resourceBar">
-			🟢 Lumber: {$resourcesStore.lumber} | 🟡 Gold: {$resourcesStore.gold} | 🔵 Mana: {$resourcesStore.mana}
+			🟢 Lumber: {$resourcesStore.lumber} | 🟡 Gold: {$resourcesStore.gold} | 🟣 Mana: {$resourcesStore.mana}
 		</div>
 	</Ui>
 </main>

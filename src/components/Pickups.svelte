@@ -22,8 +22,7 @@
 
 <style>
   .pickupIcon {
-    width: 25px;
+    width: 32px;
     cursor: pointer;
   }
 </style>
-

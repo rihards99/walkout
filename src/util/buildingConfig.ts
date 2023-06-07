@@ -3,11 +3,14 @@ import { addBuilding, buildingsStore } from "../stores/buildingStore";
 import { BuildingType, ResourceType, type Point } from "./types"
 import { addResource, resourcesStore, spendResource } from "../stores/resourcesStore";
 import { distanceBetweenInKm, getCurrentTimestamp } from "./util";
+import woodcutterIcon from '$lib/images/buildings/woodcutter.png';
+import goldMineIcon from '$lib/images/buildings/goldmine.png';
+import manaWellIcon from '$lib/images/buildings/manawell.png';
 
 type BuildingConfig = {
   [key in BuildingType]: {
     title: string,
-    color: string,
+    icon: string,
     cost: {
       resource: ResourceType,
       amount: number,
@@ -59,7 +62,7 @@ export const harvestBuilding = (buildingId: string) => {
 export const BUILDINGS: BuildingConfig = {
   [BuildingType.LumberMill]: {
     title: 'Lumberyard',
-    color: 'rgb(150,205,150)',
+    icon: woodcutterIcon,
     cost: [{
       resource: ResourceType.Lumber,
       amount: 5
@@ -69,7 +72,7 @@ export const BUILDINGS: BuildingConfig = {
   },
   [BuildingType.GoldMine]: {
     title: 'Gold Mine',
-    color: 'rgb(205,205,100)',
+    icon: goldMineIcon,
     cost: [{
       resource: ResourceType.Gold,
       amount: 5
@@ -79,7 +82,7 @@ export const BUILDINGS: BuildingConfig = {
   },
   [BuildingType.ManaWell]: {
     title: 'Mana Well',
-    color: 'rgb(100,100,255)',
+    icon: manaWellIcon,
     cost: [{
       resource: ResourceType.Lumber,
       amount: 20

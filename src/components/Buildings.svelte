@@ -12,10 +12,19 @@
   <Marker
     lat={building.coords.lat}
     lng={building.coords.lng}
-    color={BUILDINGS[building.type].color}
-    label="some marker label"
-    popupClassName="class-name"
   >
     <Popup building={building} slot="popup"/>
+    <img
+      class="buildingIcon"
+      src={BUILDINGS[building.type].icon}
+      alt={BUILDINGS[building.type].title}
+    />
   </Marker>
 {/each}
+
+<style>
+  .buildingIcon {
+    width: 48px;
+    cursor: pointer;
+  }
+</style>

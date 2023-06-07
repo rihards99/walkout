@@ -1,9 +1,9 @@
 import { get } from 'svelte/store';
 
 import { PickupType, ResourceType } from "./types"
-import logImage from '$lib/images/pickups/log.svg';
-import goldImage from '$lib/images/pickups/gold.svg';
-import manaImage from '$lib/images/pickups/mana.svg';
+import logImage from '$lib/images/pickups/log3.svg';
+import goldImage from '$lib/images/pickups/gold4.svg';
+import manaImage from '$lib/images/pickups/mana3.svg';
 import { addResource } from "../stores/resourcesStore";
 import { pickupStore } from "../stores/pickupStore";
 import { isPointInRange } from './util';
