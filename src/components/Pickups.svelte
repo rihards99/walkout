@@ -2,7 +2,7 @@
   import { Marker } from '@beyonk/svelte-mapbox'
 
   import { pickupStore } from '../stores/pickupStore';
-  import { PICKUPS } from '../util/pickupConfig';
+  import { PICKUPS } from '../configs/pickupConfig';
 </script>
 
 {#each $pickupStore as pickup}

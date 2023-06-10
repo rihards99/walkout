@@ -10,16 +10,18 @@ export type State = {
   skills: Skills,
 }
 
-export interface Resources {
-  lumber: number;
-  gold: number;
-  mana: number;
+export type Resources = {
+  // lumber: number;
+  // gold: number;
+  // mana: number;
+  [key in ResourceType]: number;
 }
 
 export enum ResourceType {
   Lumber = 'lumber',
   Gold = 'gold',
-  Mana = 'mana'
+  Mana = 'mana',
+  Planks = 'planks',
 }
 
 export enum BuildingType {

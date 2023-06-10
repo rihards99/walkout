@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { BUILDINGS } from '../util/buildingConfig';
-	import { harvestBuilding } from '../util/buildingConfig';
+	import { BUILDINGS, harvestBuilding } from '../configs/buildingConfig';
   import type { Building } from '../util/types';
 
   export let building: Building;
 
   let currentTime = (new Date).getTime() / 1000;
-  const cooldown = BUILDINGS[building.type].cooldown;
+  const cooldown = BUILDINGS[building.type]!.cooldown;
   let canHarvest = currentTime - building.timeSinceLastHarvest >= cooldown;
 
   const onClick = () => {

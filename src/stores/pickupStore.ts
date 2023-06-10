@@ -1,10 +1,7 @@
 import { get, writable } from 'svelte/store';
 import { v4 as uuidv4 } from 'uuid';
 import type { Point, PickupType, Pickup } from '../util/types';
-import { addResource } from './resourcesStore';
-import { PICKUPS } from '../util/pickupConfig';
-
-const getCurrentTimestamp = () => (new Date).getTime() / 1000;
+import { PICKUPS } from '../configs/pickupConfig';
 
 export const pickupStore = writable<Pickup[]>([]);
 

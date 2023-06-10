@@ -2,7 +2,7 @@ import { distance, type Units } from '@turf/turf';
 import { get } from 'svelte/store';
 import { locationStore } from '../stores/locationStore';
 
-import type { Point } from './types';
+import type { Point } from '../util/types';
 
 export const RANGE = 0.1; // km
 
@@ -29,7 +29,7 @@ export const createGeoJSONCircle = function (coords: Point, radiusInKm: number, 
   let theta, x, y;
   for (var i = 0; i < points; i++) {
     theta = (i / points) * (2 * Math.PI);
-x = distanceX * Math.cos(theta);
+    x = distanceX * Math.cos(theta);
     y = distanceY * Math.sin(theta);
 
     ret.push([coords.lng + x, coords.lat + y]);

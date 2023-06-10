@@ -1,8 +1,8 @@
 import { get } from "svelte/store";
 import { addBuilding, buildingsStore } from "../stores/buildingStore";
-import { BuildingType, ResourceType, type Point } from "./types"
+import { BuildingType, ResourceType, type Point } from "../util/types"
 import { addResource, resourcesStore, spendResource } from "../stores/resourcesStore";
-import { distanceBetweenInKm, getCurrentTimestamp } from "./util";
+import { distanceBetweenInKm, getCurrentTimestamp } from "../util/util";
 import woodcutterIcon from '$lib/images/buildings/woodcutter.png';
 import goldMineIcon from '$lib/images/buildings/goldmine.png';
 import manaWellIcon from '$lib/images/buildings/manawell.png';

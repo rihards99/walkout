@@ -2,8 +2,8 @@ import { get } from 'svelte/store';
 import { randomPosition, lengthToDegrees } from '@turf/turf';
 import { setSkillCooldown } from "../stores/skillStore";
 import { locationStore } from '../stores/locationStore';
-import { PickupType, SkillType } from "./types";
-import { randomElement } from './util';
+import { PickupType, SkillType } from "../util/types";
+import { randomElement } from '../util/util';
 import { createPickup } from '../stores/pickupStore';
 import { mapStore } from '../stores/mapStore';
 import type { Map } from 'mapbox-gl';
@@ -20,8 +20,8 @@ const daysToSeconds = (days: number) => days * 24 * 60 * 60;
 export const SKILLS: SkillConfig = {
   [SkillType.FindResources]: {
     onUse: () => {
-      const findResourceDistance = 2;
-      const findResourcesNumber = 15;
+      const findResourceDistance = 1;
+      const findResourcesNumber = 25;
 
       console.log("Find Resources used");
       setSkillCooldown(SkillType.FindResources);
@@ -45,7 +45,7 @@ export const SKILLS: SkillConfig = {
 
       const map = (get(mapStore) as unknown) as Map;
       if (map) {
-        map.flyTo({center: [lng, lat], zoom: 12});
+        map.flyTo({center: [lng, lat], zoom: 13});
       }
     },
     cooldown: daysToSeconds(1)

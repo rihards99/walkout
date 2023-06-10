@@ -1,12 +1,10 @@
 import { get } from 'svelte/store';
 
-import { PickupType, ResourceType } from "./types"
-import logImage from '$lib/images/pickups/log3.svg';
-import goldImage from '$lib/images/pickups/gold4.svg';
-import manaImage from '$lib/images/pickups/mana3.svg';
+import { PickupType, ResourceType } from "../util/types"
 import { addResource } from "../stores/resourcesStore";
 import { pickupStore } from "../stores/pickupStore";
-import { isPointInRange } from './util';
+import { isPointInRange } from '../util/util';
+import { RESOURCES } from './resourceConfig';
 
 type PickupConfig = {
   [key in PickupType]: {
@@ -32,14 +30,14 @@ const onResourcePickup = (id: string, resourceType: ResourceType) => {
 export const PICKUPS: PickupConfig = {
   [PickupType.Lumber]: {
     onPickup: (id: string) => onResourcePickup(id, ResourceType.Lumber),
-    icon: logImage
+    icon: RESOURCES[ResourceType.Lumber].icon
   },
   [PickupType.Gold]: {
     onPickup: (id: string) => onResourcePickup(id, ResourceType.Gold),
-    icon: goldImage
+    icon: RESOURCES[ResourceType.Gold].icon
   },
   [PickupType.Mana]: {
     onPickup: (id: string) => onResourcePickup(id, ResourceType.Mana),
-    icon: manaImage
+    icon: RESOURCES[ResourceType.Mana].icon
   }
 }

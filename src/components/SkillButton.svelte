@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { SKILLS } from '../util/skillConfig';
+  import { SKILLS } from '../configs/skillConfig';
 	import { skillStore } from '../stores/skillStore';
   import { getCurrentTimestamp } from '../util/util';
 	import type { SkillType } from "../util/types";
@@ -12,7 +12,7 @@
   onMount(async () => {
 		setInterval(() => {
 			const { timeSinceLastUsed } = $skillStore[skillType];
-			const timeRemaining = timeSinceLastUsed + SKILLS[skillType].cooldown - getCurrentTimestamp();
+			const timeRemaining = timeSinceLastUsed + SKILLS[skillType]!.cooldown - getCurrentTimestamp();
 			cooldown = Math.round(Math.max(timeRemaining, 0));
 		}, 500)
 	});

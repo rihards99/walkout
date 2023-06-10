@@ -16,12 +16,15 @@
 	import { initLocalState } from '../util/localState';
 	import { createGeoJSONCircle, RANGE } from '../util/util';
 	import SkillButton from '../components/SkillButton.svelte';
-	import { BUILDINGS, build, hasEnoughResourcesToBuild } from '../util/buildingConfig';
+	import { BUILDINGS, build, hasEnoughResourcesToBuild } from '../configs/buildingConfig';
+	import { RESOURCES } from '../configs/resourceConfig';
+	import Inventory from '../components/Inventory.svelte';
 
 	const { GeolocateControl } = controls;
 
 	let mapComponent: Map;
 	let controlComponent: typeof GeolocateControl;
+	let showInventory = false;
 
 	const clearSave = () => {
 		localStorage.removeItem('gameState');
@@ -63,16 +66,16 @@
 		})
 	};
 
-	const onDropdownClick = (dropdownClass: string) => {
+	const onDropdownClick = (dropdownClass: string, showClass: string = "show") => {
+
 		const el = document.querySelector(dropdownClass)
-		if (el?.classList.contains("show")) {
-			el?.classList.remove("show");
+		if (el?.classList.contains(showClass)) {
+			el?.classList.remove(showClass);
 		} else {
-			document.querySelectorAll(".show")?.forEach(e => e.classList.remove("show"));
-			el?.classList.add("show");
+			document.querySelectorAll(`.${showClass}`)?.forEach(e => e.classList.remove(showClass));
+			el?.classList.add(showClass);
 		}
 	}
-
 
 	// TODO: Generalize
 	let canBuildLumberyard = true;
@@ -101,7 +104,6 @@
 	</Map>
 
 	<Ui>
-		<button on:click={() => onDropdownClick(".buildOptions")}>BUILD</button>
 		<div class="buildOptions dropdown">
 			<button disabled={!canBuildLumberyard} on:click={() => build($locationStore, BuildingType.LumberMill)}>
 				Build Lumberyard<br>
@@ -117,12 +119,10 @@
 			</button>
 		</div>
 
-		<button on:click={() => onDropdownClick(".skillOptions")}>USE SKILL</button>
 		<div class="skillOptions dropdown">
 			<SkillButton skillType={SkillType.FindResources}/>
 		</div>
 
-		<button class="cheatsButton" on:click={() => onDropdownClick(".cheatsOptions")}>CHEATS</button>
 		<div class="cheatsOptions dropdown">
 			<button on:click={() => addResource(ResourceType.Lumber, 1)}>Earn lumber</button>
 			<button on:click={() => addResource(ResourceType.Gold, 1)}>Earn gold</button>
@@ -150,9 +150,25 @@
 			>
 			<button on:click={clearSave}>Clear Save</button>
 		</div>
-		<div class="resourceBar">
-			🟢 Lumber: {$resourcesStore.lumber} | 🟡 Gold: {$resourcesStore.gold} | 🟣 Mana: {$resourcesStore.mana}
+
+		<div class="bottomButtons">
+			<button on:click={() => showInventory = !showInventory}>
+				<span class="bottomButtonLabel">Inventory</span>📦
+			</button>
+			<button on:click={() => onDropdownClick(".buildOptions")}>
+				<span class="bottomButtonLabel">Build</span>⚒️
+			</button>
+			<button on:click={() => onDropdownClick(".skillOptions")}>
+				<span class="bottomButtonLabel">Skills</span>📜
+			</button>
+			<button on:click={() => onDropdownClick(".cheatsOptions")} style="background-color: rgb(237 139 139);">
+				<span class="bottomButtonLabel">Cheats</span>🔒
+			</button>
 		</div>
+
+		{#if showInventory}
+			<Inventory onClose={() => showInventory = false}/>	
+		{/if}
 	</Ui>
 </main>
 
@@ -175,26 +191,48 @@
 		min-height: 90vh;
 	}
 
-	.resourceBar {
-		background: white;
+	.bottomButtons {
 		position: absolute;
 		bottom: 30px;
-		border-radius: 10px;
+		right: 0px;
+	}
+
+	.bottomButtonLabel {
+		position: absolute;
+    font-size: 15px;
+    bottom: -22px;
+    left: -3px;
+    text-align: center;
+    width: 70px;
+    padding: 0;
+	}
+
+	.bottomButtons > * {
+		position: relative;
+		font-size: 32px;
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    background-color: #dbd6d6;
+    border: solid 3px black;
 	}
 
 	.dropdown {
 		display: none;
 		position: absolute;
+		bottom: 110px;
+		right: 0px;
     flex-direction: column;
 		gap: 10px;
+		z-index: 3;
 	}
 
 	:global(.show) {
 		display: flex!important;
 	}
 
-	.cheatsButton {
-		background-color: #ff4e4e;
+	:global(.showInventory) {
+		display: inherit!important;
 	}
 
 	:global(.mapboxgl-user-location-accuracy-circle), :global(.mapboxgl-user-location) {

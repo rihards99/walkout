@@ -1,7 +1,7 @@
 import { get } from "svelte/store"
 import { browser } from '$app/environment';
 
-import type { State } from "./types"
+import type { State } from "../util/types"
 import { mapStore } from "../stores/mapStore";
 import { resourcesStore } from "../stores/resourcesStore";
 import { buildingsStore } from "../stores/buildingStore";
@@ -23,7 +23,9 @@ export const initLocalState = () => {
           buildingsStore.update(() => state.buildings)
         }
         if (state.resources) {
-          resourcesStore.update(() => state.resources)
+          resourcesStore.update((resources) => {
+            return {...resources, ...state.resources} // Adds new resources to the resource store
+          })
         }
         if (state.pickups) {
           pickupStore.update(() => state.pickups)

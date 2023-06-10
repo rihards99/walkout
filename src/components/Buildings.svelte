@@ -2,7 +2,7 @@
   import { Marker } from '@beyonk/svelte-mapbox'
 
   import { buildingsStore } from '../stores/buildingStore';
-  import { BUILDINGS } from '../util/buildingConfig';
+  import { BUILDINGS } from '../configs/buildingConfig';
 	import Popup from './Popup.svelte';
 
   
