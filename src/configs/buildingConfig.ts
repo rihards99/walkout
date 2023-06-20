@@ -1,4 +1,5 @@
 import { get } from "svelte/store";
+import type { ComponentType } from "svelte";
 import { addBuilding, buildingsStore } from "../stores/buildingStore";
 import { BuildingType, ResourceType, type Point } from "../util/types"
 import { addResource, resourcesStore, spendResource } from "../stores/resourcesStore";
@@ -6,6 +7,7 @@ import { distanceBetweenInKm, getCurrentTimestamp } from "../util/util";
 import woodcutterIcon from '$lib/images/buildings/woodcutter.png';
 import goldMineIcon from '$lib/images/buildings/goldmine.png';
 import manaWellIcon from '$lib/images/buildings/manawell.png';
+import HarvestPopup from "../components/HarvestPopup.svelte";
 
 type BuildingConfig = {
   [key in BuildingType]: {
@@ -16,7 +18,9 @@ type BuildingConfig = {
       amount: number,
     }[]
     cooldown: number,
+    popup: ComponentType,
     harvestResource?: ResourceType,
+    hp: number,
   }
 };
 
@@ -68,7 +72,9 @@ export const BUILDINGS: BuildingConfig = {
       amount: 5
     }],
     cooldown: 7200, // 2 hours
+    popup: HarvestPopup,
     harvestResource: ResourceType.Lumber,
+    hp: 3,
   },
   [BuildingType.GoldMine]: {
     title: 'Gold Mine',
@@ -78,7 +84,9 @@ export const BUILDINGS: BuildingConfig = {
       amount: 5
     }],
     cooldown: 7200, // 2 hours
+    popup: HarvestPopup,
     harvestResource: ResourceType.Gold,
+    hp: 3,
   },
   [BuildingType.ManaWell]: {
     title: 'Mana Well',
@@ -91,6 +99,8 @@ export const BUILDINGS: BuildingConfig = {
       amount: 20
     }],
     cooldown: 86400, // 24 hours
+    popup: HarvestPopup,
     harvestResource: ResourceType.Mana,
-  }
+    hp: 5,
+  },
 }

@@ -9,18 +9,19 @@
 	import Ui from '../components/Ui.svelte';
 	import Buildings from '../components/Buildings.svelte';
 	import Pickups from '../components/Pickups.svelte';
+	import SkillButton from '../components/SkillButton.svelte';
+	import Inventory from '../components/Inventory.svelte';
+	import HostileBuildings from '../components/HostileBuildings.svelte';
 	import { addResource, resourcesStore } from '../stores/resourcesStore';
 	import { createPickup } from '../stores/pickupStore';
-
-	import { BuildingType, PickupType, ResourceType, SkillType } from '../util/types';
+	import { addHostileBuilding } from '../stores/hostileBuildingStore';
 	import { initLocalState } from '../util/localState';
+	import { BuildingType, HostileBuildingType, PickupType, ResourceType, SkillType } from '../util/types';
 	import { createGeoJSONCircle, RANGE } from '../util/util';
-	import SkillButton from '../components/SkillButton.svelte';
 	import { BUILDINGS, build, hasEnoughResourcesToBuild } from '../configs/buildingConfig';
-	import { RESOURCES } from '../configs/resourceConfig';
-	import Inventory from '../components/Inventory.svelte';
 
 	const { GeolocateControl } = controls;
+	const PLAYER_RANGE_GEOJSON_NAME = 'playerRange';
 
 	let mapComponent: Map;
 	let controlComponent: typeof GeolocateControl;
@@ -50,19 +51,36 @@
 		mapStore.update(() => mapComponent.getMap());
 
 		const map = mapComponent.getMap();
-		map.addSource('polygon', createGeoJSONCircle(get(locationStore), RANGE));
+
+		map.addSource(PLAYER_RANGE_GEOJSON_NAME, {
+			type: 'geojson',
+			data: {
+				type: 'FeatureCollection',
+				features: [
+					createGeoJSONCircle(get(locationStore), RANGE)
+				]
+			}
+		});
+
 		map.addLayer({
-			id: 'polygon',
+			id: PLAYER_RANGE_GEOJSON_NAME,
 			type: 'line',
-			source: 'polygon',
+			source: PLAYER_RANGE_GEOJSON_NAME,
 			layout: {},
 			paint: {
 				'line-width': 1,
 				'line-color': 'grey'
 			}
 		});
+
 		locationStore.subscribe(location => {
-			map.getSource('polygon').setData(createGeoJSONCircle(location, RANGE).data);
+
+			map.getSource(PLAYER_RANGE_GEOJSON_NAME).setData({
+				type: 'FeatureCollection',
+				features: [
+					createGeoJSONCircle(location, RANGE)
+				]
+			});
 		})
 	};
 
@@ -100,6 +118,7 @@
 		<GeolocateControl options={geoControlOptions} bind:this={controlComponent} />
 
 		<Buildings />
+		<HostileBuildings />
 		<Pickups />
 	</Map>
 
@@ -132,22 +151,33 @@
 					createPickup(
 						{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
 						PickupType.Lumber
-					)}>Spawn lumber pickup</button
+					)}
 			>
+				Spawn lumber pickup
+			</button>
 			<button
 				on:click={() =>
 					createPickup(
 						{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
 						PickupType.Gold
-					)}>Spawn gold pickup</button
+					)}
 			>
+				Spawn gold pickup
+			</button>
 			<button
 				on:click={() =>
 					createPickup(
 						{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
 						PickupType.Mana
-					)}>Spawn mana pickup</button
+					)}
 			>
+				Spawn mana pickup
+			</button>
+			<button on:click={() => addHostileBuilding(
+					{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
+					HostileBuildingType.RaiderCamp
+				)}
+			>Spawn raider camp</button>
 			<button on:click={clearSave}>Clear Save</button>
 		</div>
 

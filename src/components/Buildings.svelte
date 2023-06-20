@@ -3,7 +3,7 @@
 
   import { buildingsStore } from '../stores/buildingStore';
   import { BUILDINGS } from '../configs/buildingConfig';
-	import Popup from './Popup.svelte';
+	import HarvestPopup from './HarvestPopup.svelte';
 
   
 </script>
@@ -13,12 +13,13 @@
     lat={building.coords.lat}
     lng={building.coords.lng}
   >
-    <Popup building={building} slot="popup"/>
+    <HarvestPopup building={building} slot="popup"/>
     <img
       class="buildingIcon"
       src={BUILDINGS[building.type].icon}
       alt={BUILDINGS[building.type].title}
     />
+    <div class="hp">{building.hp} / {BUILDINGS[building.type].hp}</div>
   </Marker>
 {/each}
 
@@ -26,5 +27,11 @@
   .buildingIcon {
     width: 48px;
     cursor: pointer;
+  }
+
+  .hp {
+    background: white;
+    border-radius: 5px;
+    border: solid 1px black;
   }
 </style>

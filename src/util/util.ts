@@ -6,7 +6,7 @@ import type { Point } from '../util/types';
 
 export const RANGE = 0.1; // km
 
-export const getCurrentTimestamp = () => (new Date).getTime() / 1000;
+export const getCurrentTimestamp = () => Math.floor((new Date).getTime() / 1000);
 
 export const distanceBetweenInKm = (point1: Point, point2: Point) => {
   const options = { units: "kilometers" as Units };
@@ -20,14 +20,14 @@ export const isPointInRange = (point: Point) => {
   return distanceToPoint <= RANGE;
 }
 
-export const createGeoJSONCircle = function (coords: Point, radiusInKm: number, points = 64) {
+export const createGeoJSONCircle = (coords: Point, radiusInKm: number, points = 64) => {
   const km = radiusInKm;
   const ret = [];
   const distanceX = km / (111.32 * Math.cos((coords.lat * Math.PI) / 180));
   const distanceY = km / 110.574;
 
   let theta, x, y;
-  for (var i = 0; i < points; i++) {
+  for (let i = 0; i < points; i++) {
     theta = (i / points) * (2 * Math.PI);
     x = distanceX * Math.cos(theta);
     y = distanceY * Math.sin(theta);
@@ -37,18 +37,10 @@ export const createGeoJSONCircle = function (coords: Point, radiusInKm: number, 
   ret.push(ret[0]);
 
   return {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates: [ret]
-          }
-        }
-      ]
+    type: 'Feature',
+    geometry: {
+      type: 'Polygon',
+      coordinates: [ret]
     }
   };
 };

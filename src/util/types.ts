@@ -5,15 +5,14 @@ export type Point = {
 
 export type State = {
   buildings: Building[],
+  hostileBuildings: HostileBuilding[],
   pickups: Pickup[],
   resources: Resources,
   skills: Skills,
+  events: Events,
 }
 
 export type Resources = {
-  // lumber: number;
-  // gold: number;
-  // mana: number;
   [key in ResourceType]: number;
 }
 
@@ -28,6 +27,10 @@ export enum BuildingType {
   LumberMill = 'lumberMill',
   GoldMine = 'goldMine',
   ManaWell = 'manaWell',
+}
+
+export enum HostileBuildingType {
+  RaiderCamp = 'raiderCamp',
 }
 
 export enum PickupType {
@@ -54,8 +57,22 @@ export interface MapObject {
 export type Building = MapObject & {
   type: BuildingType,
   timeSinceLastHarvest: number;
+  hp: number;
+}
+
+export type HostileBuilding = MapObject & {
+  type: HostileBuildingType;
 }
 
 export type Pickup = MapObject & {
   type: PickupType,
+}
+
+export enum EventType {
+  RaiderCampSpawn = 'raiderCampSpawn',
+  HostileBuildingsAttack = 'hostileBuildingsAttack',
+}
+
+export type Events = {
+  [key in EventType]: number;
 }

@@ -21,7 +21,7 @@ export const SKILLS: SkillConfig = {
   [SkillType.FindResources]: {
     onUse: () => {
       const findResourceDistance = 1;
-      const findResourcesNumber = 25;
+      const findResourcesNumber = 15;
 
       console.log("Find Resources used");
       setSkillCooldown(SkillType.FindResources);
@@ -48,6 +48,6 @@ export const SKILLS: SkillConfig = {
         map.flyTo({center: [lng, lat], zoom: 13});
       }
     },
-    cooldown: daysToSeconds(1)
+    cooldown: daysToSeconds(0.5)
   },
 }
