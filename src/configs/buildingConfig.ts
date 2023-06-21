@@ -63,6 +63,23 @@ export const harvestBuilding = (buildingId: string) => {
   return false;
 }
 
+export const repairBuilding = (buildingId: string) => {
+  console.log(buildingId)
+
+  const buildings = get(buildingsStore)
+  const building = buildings.find(b => b.id === buildingId);
+
+  if (building) {
+    try {
+      spendResource(ResourceType.Lumber, 1);
+      building.hp += 1;
+      buildingsStore.update(() => [...buildings]);
+    } catch (e) {
+      alert(e);
+    }
+  }
+}
+
 export const BUILDINGS: BuildingConfig = {
   [BuildingType.LumberMill]: {
     title: 'Lumberyard',

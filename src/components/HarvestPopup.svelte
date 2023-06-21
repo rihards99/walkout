@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BUILDINGS, harvestBuilding } from '../configs/buildingConfig';
+	import { BUILDINGS, harvestBuilding, repairBuilding } from '../configs/buildingConfig';
   import type { Building } from '../util/types';
 
   export let building: Building;
@@ -8,10 +8,14 @@
   const cooldown = BUILDINGS[building.type]!.cooldown;
   let canHarvest = currentTime - building.timeSinceLastHarvest >= cooldown;
 
-  const onClick = () => {
+  const onHarvestClick = () => {
     const didHarvest = harvestBuilding(building.id)
     canHarvest = !didHarvest; // If harvest was successful, set canHarvest to false
   };
+
+  const onRepairClick = () => {
+    repairBuilding(building.id)
+  }
 
   setInterval(() => {
     currentTime = (new Date).getTime() / 1000;
@@ -27,9 +31,13 @@
   {BUILDINGS[building.type].title}<br/>
 
   {#if canHarvest}
-    <button on:click={onClick}>HARVEST</button>
+    <button on:click={onHarvestClick}>HARVEST</button>
   {:else}
     <p>Unavailable until: {new Date((building.timeSinceLastHarvest + cooldown) * 1000).toLocaleString()}</p>
+  {/if}
+
+  {#if building.hp < BUILDINGS[building.type].hp}
+    <button on:click={onRepairClick}>REPAIR<br>(cost: 1 lumber)</button>
   {/if}
 </p>
 

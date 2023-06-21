@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { Resources, ResourceType } from '../util/types';
+import { ResourceType, type Resources } from '../util/types';
 import { RESOURCES } from '../configs/resourceConfig';
 
 export const addResource = (resourceType: ResourceType, amount: number) => {
@@ -14,7 +14,13 @@ export const addResource = (resourceType: ResourceType, amount: number) => {
 export const spendResource = (resourceType: ResourceType, amount: number) => {
   resourcesStore.update((resources) => {
     console.log("🚀 ~ resources:", resources);
-    resources[resourceType] -= amount;
+
+    if (resources[resourceType] - amount >= 0 ) {
+      resources[resourceType] -= amount;
+    } else {
+      throw new Error("Missing resource")
+    }
+
     console.log("🚀 ~ {...resources}:", {...resources});
     return {...resources};
   })
