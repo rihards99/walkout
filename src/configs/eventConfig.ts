@@ -41,7 +41,7 @@ export const EVENTS: EventConfig = {
     }
   },
   [EventType.HostileBuildingsAttack]: {
-    cooldown: 60 * 60 * 2,
+    cooldown: 60 * 60 * 6,
     effect: () => {
       console.log("Event: HOSTILE BUILDINGS ATTACK")
       const hostileBuldings = get(hostileBuildingStore);
