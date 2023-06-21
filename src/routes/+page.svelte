@@ -218,7 +218,7 @@
 	}
 
 	:global(.mapboxgl-map) {
-		min-height: 90vh;
+		min-height: 100dvh;
 	}
 
 	.bottomButtons {
