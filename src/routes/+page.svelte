@@ -250,6 +250,7 @@
     border-left: 4px groove #ffb000;
     border-right: 4px ridge #ffb000;
     border-bottom: 4px ridge #ffb000;
+		box-shadow: inset 0px 0px 5px 3px rgba(1,1,1,0.3);
 	}
 
 	.dropdown {

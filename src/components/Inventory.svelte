@@ -38,26 +38,44 @@
 		background: #dbd6d6;
     margin: 20px;
     border-radius: 10px;
-    border: solid 1px black;
     height: 78%;
     position: relative;
     z-index: 2;
-		padding: 10px 20px;
+		padding: 20px 20px;
+
+    background: radial-gradient(circle, #8b0000, #8b0000);
+    border-top: 4px ridge #ffb000;
+    border-left: 4px groove #ffb000;
+    border-right: 4px ridge #ffb000;
+    border-bottom: 4px groove #ffb000;
+    box-shadow: inset 0px 0px 5px 3px rgba(1,1,1,0.3);
+    color: #ffc000;
+    font-size: 18px;
+    font-weight: 400;
+    text-shadow: 0 1px 3px #000;
 	}
 
   .closeButton {
-    float: right;
-    padding: 4px;
+    border-radius: 8px;
+    font-family: 'Skranji', cursive;
+    color: #d1d1d1;
     font-size: 18px;
-    line-height: 18px;
+    font-weight: 400;
+    text-align: center;
+    background: radial-gradient(circle, #ffb000, #ffb000);
+    border: none;
+    box-shadow: inset 0px 0px 5px 3px rgba(1,1,1,0.3);
+    float: right;
+    width: 30px;
+    height: 30px;
   }
 
 	.resources {
 		display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 20px;
+    margin-top: 30px;
 	}
 
 	.resourceBox {
@@ -66,8 +84,6 @@
     align-items: center;
     width: 72px;
     padding: 0;
-    border: solid 1px;
-    background-color: #fff;
     border-radius: 10px;
 	}
 
