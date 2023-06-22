@@ -233,6 +233,7 @@
     text-align: center;
     width: 70px;
     padding: 0;
+		color: #000;
 	}
 
 	.bottomButtonIcon {
@@ -241,7 +242,6 @@
 
 	.bottomButton {
 		position: relative;
-		font-size: 32px;
     width: 70px;
     height: 70px;
     border-radius: 35px;
