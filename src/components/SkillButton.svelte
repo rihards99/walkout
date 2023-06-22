@@ -15,7 +15,10 @@
 		setInterval(() => {
 			const { timeSinceLastUsed } = $skillStore[skillType];
 			const timeRemaining = timeSinceLastUsed + SKILLS[skillType]!.cooldown - getCurrentTimestamp();
-			cooldownString = getRelativeTime(new Date(), new Date(timeSinceLastUsed * 1000))
+			cooldownString = getRelativeTime(
+				new Date((timeSinceLastUsed + SKILLS[skillType]!.cooldown) * 1000),
+				new Date(),
+			);
 			cooldown = Math.round(Math.max(timeRemaining, 0));
 		}, 500)
 	});
