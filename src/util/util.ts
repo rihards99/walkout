@@ -48,3 +48,44 @@ export const createGeoJSONCircle = (coords: Point, radiusInKm: number, points = 
 export const randomElement = <T>(arr: T[]) => {
   return arr[Math.floor((Math.random() * arr.length))] as T;
 }
+
+// in miliseconds
+const units: { [key: string]: number } = {
+  year  : 24 * 60 * 60 * 1000 * 365,
+  month : 24 * 60 * 60 * 1000 * 365 / 12,
+  day   : 24 * 60 * 60 * 1000,
+  hour  : 60 * 60 * 1000,
+  minute: 60 * 1000,
+  second: 1000
+}
+
+const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
+
+type RelativeTimeFormatUnit =
+  | "year"
+  | "years"
+  | "quarter"
+  | "quarters"
+  | "month"
+  | "months"
+  | "week"
+  | "weeks"
+  | "day"
+  | "days"
+  | "hour"
+  | "hours"
+  | "minute"
+  | "minutes"
+  | "second"
+  | "seconds";
+
+export const getRelativeTime = (d1: Date, d2 = new Date()) => {
+  const elapsed = d1.getTime() - d2.getTime();
+
+  // "Math.abs" accounts for both "past" & "future" scenarios
+  for (const u in units)
+    if (Math.abs(elapsed) > units[u]! || u == 'second') 
+      return rtf.format(Math.round(elapsed/units[u]!), u as RelativeTimeFormatUnit)
+
+  return "";
+}

@@ -19,6 +19,15 @@
 	import { BuildingType, HostileBuildingType, PickupType, ResourceType, SkillType } from '../util/types';
 	import { createGeoJSONCircle, RANGE } from '../util/util';
 	import { BUILDINGS, build, hasEnoughResourcesToBuild } from '../configs/buildingConfig';
+	import { RESOURCES } from '../configs/resourceConfig';
+	import Button from '../components/UI/Button.svelte';
+	import ResourceIcon from '../components/UI/ResourceIcon.svelte';
+	
+
+	import chestIcon from '$lib/images/ui/chest.svg';
+	import hammerIcon from '$lib/images/ui/thor-hammer.svg';
+	import bookIcon from '$lib/images/ui/spell-book.svg';
+	import chainsIcon from '$lib/images/ui/crossed-chains.svg';
 
 	const { GeolocateControl } = controls;
 	const PLAYER_RANGE_GEOJSON_NAME = 'playerRange';
@@ -95,15 +104,18 @@
 		}
 	}
 
-	// TODO: Generalize
-	let canBuildLumberyard = true;
-	let canBuildGoldMine = true;
-	let canBuildManaWell = true;
-	resourcesStore.subscribe(() => {
-		canBuildLumberyard = hasEnoughResourcesToBuild(BuildingType.LumberMill);
-		canBuildGoldMine = hasEnoughResourcesToBuild(BuildingType.GoldMine)
-		canBuildManaWell = hasEnoughResourcesToBuild(BuildingType.ManaWell)
-	})
+	const onCreatePickupClick = (pickupType: PickupType) => createPickup(
+		{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
+		pickupType
+	);
+
+	// Object.keys always returns string[], so you need to assert it as something
+  // before using it.
+	let buildingTypes: BuildingType[];
+  $: {
+		$resourcesStore;
+    buildingTypes = Object.keys(BUILDINGS) as BuildingType[];
+  }
 </script>
 
 <main>
@@ -124,18 +136,22 @@
 
 	<Ui>
 		<div class="buildOptions dropdown">
-			<button disabled={!canBuildLumberyard} on:click={() => build($locationStore, BuildingType.LumberMill)}>
-				Build Lumberyard<br>
-				({BUILDINGS.lumberMill.cost.reduce((acc, cost) => acc + `${cost.resource}: ${cost.amount}`, "")})
-			</button>
-			<button disabled={!canBuildGoldMine} on:click={() => build($locationStore, BuildingType.GoldMine)}>
-				Build Gold Mine<br>
-				({BUILDINGS.goldMine.cost.reduce((acc, cost) => acc + `${cost.resource}: ${cost.amount}`, "")})
-			</button>
-			<button disabled={!canBuildManaWell} on:click={() => build($locationStore, BuildingType.ManaWell)}>
-				Build Mana Well<br>
-				({BUILDINGS.manaWell.cost.reduce((acc, cost) => acc + `${cost.resource}: ${cost.amount}, `, "")})
-			</button>
+			{#each buildingTypes as buildingType}
+				<Button
+					disabled={!hasEnoughResourcesToBuild(buildingType)}
+					on:click={() => build($locationStore, buildingType)}
+				>
+					{BUILDINGS[buildingType].title}
+					<span class="buildButtonResources">
+						{#each BUILDINGS[buildingType].cost as cost}
+							<span class="buildButtonResource">
+								{cost.amount}
+								<ResourceIcon icon={RESOURCES[cost.resource].icon} />
+							</span>
+						{/each}
+					</span>
+				</Button>
+			{/each}
 		</div>
 
 		<div class="skillOptions dropdown">
@@ -143,56 +159,37 @@
 		</div>
 
 		<div class="cheatsOptions dropdown">
-			<button on:click={() => addResource(ResourceType.Lumber, 1)}>Earn lumber</button>
-			<button on:click={() => addResource(ResourceType.Gold, 1)}>Earn gold</button>
-			<button on:click={() => addResource(ResourceType.Mana, 1)}>Earn mana</button>
-			<button
-				on:click={() =>
-					createPickup(
-						{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
-						PickupType.Lumber
-					)}
-			>
-				Spawn lumber pickup
-			</button>
-			<button
-				on:click={() =>
-					createPickup(
-						{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
-						PickupType.Gold
-					)}
-			>
-				Spawn gold pickup
-			</button>
-			<button
-				on:click={() =>
-					createPickup(
-						{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
-						PickupType.Mana
-					)}
-			>
-				Spawn mana pickup
-			</button>
-			<button on:click={() => addHostileBuilding(
+			<Button on:click={() => addResource(ResourceType.Lumber, 1)}>Earn lumber</Button>
+			<Button on:click={() => addResource(ResourceType.Gold, 1)}>Earn gold</Button>
+			<Button on:click={() => addResource(ResourceType.Mana, 1)}>Earn mana</Button>
+			<Button on:click={() => onCreatePickupClick(PickupType.Lumber)}>Spawn lumber pickup</Button>
+			<Button
+				on:click={() => addHostileBuilding(
 					{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
 					HostileBuildingType.RaiderCamp
 				)}
-			>Spawn raider camp</button>
-			<button on:click={clearSave}>Clear Save</button>
+			>
+				Spawn raider camp
+			</Button>
+			<Button on:click={clearSave}>Clear Save</Button>
 		</div>
 
 		<div class="bottomButtons">
-			<button on:click={() => showInventory = !showInventory}>
-				<span class="bottomButtonLabel">Inventory</span>📦
+			<button class="bottomButton" on:click={() => showInventory = !showInventory}>
+				<img class="bottomButtonIcon" src={chestIcon} alt="inventory"/>
+				<span class="bottomButtonLabel">Inventory</span>
 			</button>
-			<button on:click={() => onDropdownClick(".buildOptions")}>
-				<span class="bottomButtonLabel">Build</span>⚒️
+			<button class="bottomButton" on:click={() => onDropdownClick(".buildOptions")}>
+				<img class="bottomButtonIcon" src={hammerIcon} alt="build"/>
+				<span class="bottomButtonLabel">Build</span>
 			</button>
-			<button on:click={() => onDropdownClick(".skillOptions")}>
-				<span class="bottomButtonLabel">Skills</span>📜
+			<button class="bottomButton" on:click={() => onDropdownClick(".skillOptions")}>
+				<img class="bottomButtonIcon" src={bookIcon} alt="skills"/>
+				<span class="bottomButtonLabel">Skills</span>
 			</button>
-			<button on:click={() => onDropdownClick(".cheatsOptions")} style="background-color: rgb(237 139 139);">
-				<span class="bottomButtonLabel">Cheats</span>🔒
+			<button class="bottomButton" on:click={() => onDropdownClick(".cheatsOptions")} style="background-color: rgb(237 139 139);">
+				<img class="bottomButtonIcon" src={chainsIcon} alt="cheats"/>
+				<span class="bottomButtonLabel">Cheats</span>
 			</button>
 		</div>
 
@@ -223,13 +220,14 @@
 
 	.bottomButtons {
 		position: absolute;
-		bottom: 30px;
+		bottom: 50px;
 		right: 0px;
 	}
 
 	.bottomButtonLabel {
 		position: absolute;
     font-size: 15px;
+		font-weight: 400;
     bottom: -22px;
     left: -3px;
     text-align: center;
@@ -237,23 +235,29 @@
     padding: 0;
 	}
 
-	.bottomButtons > * {
+	.bottomButtonIcon {
+		margin-top: 4px;
+	}
+
+	.bottomButton {
 		position: relative;
 		font-size: 32px;
     width: 70px;
     height: 70px;
     border-radius: 35px;
-    background-color: #dbd6d6;
-    border: solid 3px black;
+		background: radial-gradient(circle, #8b0000, #8b0000);
+    border-top: 4px groove #ffb000;
+    border-left: 4px groove #ffb000;
+    border-right: 4px ridge #ffb000;
+    border-bottom: 4px ridge #ffb000;
 	}
 
 	.dropdown {
 		display: none;
 		position: absolute;
-		bottom: 110px;
+		bottom: 130px;
 		right: 0px;
     flex-direction: column;
-		gap: 10px;
 		z-index: 3;
 	}
 
@@ -267,5 +271,14 @@
 
 	:global(.mapboxgl-user-location-accuracy-circle), :global(.mapboxgl-user-location) {
 		pointer-events: none!important;
+	}
+
+	.buildButtonResource {
+		display: flex;
+	}
+
+	.buildButtonResources {
+		display: flex;
+		gap: 15px;
 	}
 </style>

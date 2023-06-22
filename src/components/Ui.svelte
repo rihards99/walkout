@@ -19,7 +19,6 @@
 
 :global(.ui *) {
   pointer-events: auto;
-  padding: 10px;
   font-family: 'Skranji', cursive;
 }
 
