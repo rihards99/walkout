@@ -43,6 +43,11 @@
 	onMount(async () => {
 		initLocation();
 		initLocalState();
+
+		// Disable browser pinch zoom
+		window.addEventListener('wheel', function(e) {
+			e.preventDefault()
+		}, {passive: false})
 	});
 
 	const geoControlOptions = {
@@ -115,12 +120,6 @@
 		$resourcesStore;
     buildingTypes = Object.keys(BUILDINGS) as BuildingType[];
   }
-
-
-	// Disable browser pinch zoom
-	window.addEventListener('wheel', function(e) {
-		e.preventDefault()
-	}, {passive: false})
 
 </script>
 
