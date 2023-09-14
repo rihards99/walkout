@@ -4,7 +4,6 @@
 	import { skillStore } from '../stores/skillStore';
   import { getCurrentTimestamp, getRelativeTime } from '../util/util';
 	import type { SkillType } from "../util/types";
-	import Button from './UI/Button.svelte';
 
   export let skillType: SkillType;
 
@@ -24,9 +23,9 @@
 	});
 </script>
 
-<Button disabled={cooldown !== 0} on:click={() => SKILLS[skillType].onUse()}>
+<button class="btn" disabled={cooldown !== 0} on:click={() => SKILLS[skillType].onUse()}>
   <span>Find resource</span>
 	{#if cooldown !== 0}
 		<span>({cooldownString})</span>
 	{/if}
-</Button>
+</button>

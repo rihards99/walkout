@@ -20,7 +20,6 @@
 	import { createGeoJSONCircle, RANGE } from '../util/util';
 	import { BUILDINGS, build, hasEnoughResourcesToBuild } from '../configs/buildingConfig';
 	import { RESOURCES } from '../configs/resourceConfig';
-	import Button from '../components/UI/Button.svelte';
 	import ResourceIcon from '../components/UI/ResourceIcon.svelte';
 	
 
@@ -137,7 +136,8 @@
 	<Ui>
 		<div class="buildOptions dropdown">
 			{#each buildingTypes as buildingType}
-				<Button
+				<button
+					class="btn"
 					disabled={!hasEnoughResourcesToBuild(buildingType)}
 					on:click={() => build($locationStore, buildingType)}
 				>
@@ -150,7 +150,7 @@
 							</span>
 						{/each}
 					</span>
-				</Button>
+				</button>
 			{/each}
 		</div>
 
@@ -159,19 +159,20 @@
 		</div>
 
 		<div class="cheatsOptions dropdown">
-			<Button on:click={() => addResource(ResourceType.Lumber, 1)}>Earn lumber</Button>
-			<Button on:click={() => addResource(ResourceType.Gold, 1)}>Earn gold</Button>
-			<Button on:click={() => addResource(ResourceType.Mana, 1)}>Earn mana</Button>
-			<Button on:click={() => onCreatePickupClick(PickupType.Lumber)}>Spawn lumber pickup</Button>
-			<Button
+			<button class="btn" on:click={() => addResource(ResourceType.Lumber, 1)}>Earn lumber</button>
+			<button class="btn" on:click={() => addResource(ResourceType.Gold, 1)}>Earn gold</button>
+			<button class="btn" on:click={() => addResource(ResourceType.Mana, 1)}>Earn mana</button>
+			<button class="btn" on:click={() => onCreatePickupClick(PickupType.Lumber)}>Spawn lumber pickup</button>
+			<button
+				class="btn"
 				on:click={() => addHostileBuilding(
 					{ lat: get(locationStore).lat + 0.0001, lng: get(locationStore).lng + 0.001 },
 					HostileBuildingType.RaiderCamp
 				)}
 			>
 				Spawn raider camp
-			</Button>
-			<Button on:click={clearSave}>Clear Save</Button>
+			</button>
+			<button class="btn" on:click={clearSave}>Clear Save</button>
 		</div>
 
 		<div class="bottomButtons">

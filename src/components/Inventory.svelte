@@ -4,33 +4,59 @@
 	import type { ResourceType } from '../util/types';
 
   export let onClose: () => void;
-  let resourceList: ResourceType[];
-
-
   // Object.keys always returns string[], so you need to assert it as something
   // before using it.
-  $: {
-    resourceList = Object.keys($resourcesStore) as ResourceType[];
-  }
+  let resourceList: ResourceType[];
+  $: resourceList = Object.keys($resourcesStore) as ResourceType[];
+
+  let activeTab: "inventory" | "resources" = "inventory";
+
+  let isActive: (tab: "inventory" | "resources") => string;
+  $: isActive = (tab) => activeTab === tab ? "active": "";
 </script>
 
 <div class="inventoryModal">
-  INVENTORY
   <button on:click={onClose} class="closeButton">✖️</button>
-  <div class="resources">
-    {#each resourceList as resource}
-      <div class="resourceBox">
-        <div class="resourceIcon">
-          <img
-            src={RESOURCES[resource].icon}
-            alt={RESOURCES[resource].name}
-          />
-          <span>{$resourcesStore[resource]}</span>
+
+  <div class="tabs">
+    <button
+      class={`btn tabButton ${isActive("inventory")}`}
+      on:click={() => activeTab = "inventory"}
+    >
+      INVENTORY
+    </button>
+    <button
+      class={`btn tabButton ${isActive("resources")}`}
+      on:click={() => activeTab = "resources"}
+    >
+      RESOURCES
+    </button>
+  </div>
+
+  {#if activeTab === "resources" }
+    <div class="resources">
+      {#each resourceList as resource}
+        <div class="resourceBox">
+          <div class="resourceIcon">
+            <img
+              src={RESOURCES[resource].icon}
+              alt={RESOURCES[resource].name}
+            />
+            <span>{$resourcesStore[resource]}</span>
+          </div>
+          <span class="resourceTitle">{RESOURCES[resource].name}</span>
         </div>
-        <span class="resourceTitle">{RESOURCES[resource].name}</span>
-      </div>
+      {/each}
+    </div>
+  {/if}
+
+  {#if activeTab === "inventory" }
+  <div class="inventory">
+    {#each new Array(28) as space}
+      <div class="inventoryTile"></div>
     {/each}
   </div>
+  {/if}
 </div>
 
 <style>
@@ -109,4 +135,35 @@
 	.resourceTitle {
 		padding: 0;
 	}
+
+  .tabs {
+    display: flex;
+    margin-top: 25px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .tabButton {
+    width: auto;
+    padding: 10px;
+  }
+
+  .inventory {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 11px;
+    margin-top: 10px;
+  }
+
+  .inventoryTile {
+    background: radial-gradient(circle, #8b0000, #8b0000);
+    border-top: 4px ridge #ffb000;
+    border-left: 4px groove #ffb000;
+    border-right: 4px ridge #ffb000;
+    border-bottom: 4px groove #ffb000;
+    box-shadow: inset 0px 0px 5px 3px rgba(1,1,1,0.3);
+    width: 60px;
+    height: 60px;
+    border-radius: 3px;
+  }
 </style>
