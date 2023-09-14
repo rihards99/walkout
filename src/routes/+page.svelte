@@ -115,7 +115,20 @@
 		$resourcesStore;
     buildingTypes = Object.keys(BUILDINGS) as BuildingType[];
   }
+
+
+	// Disable browser pinch zoom
+	window.addEventListener('wheel', function(e) {
+		e.preventDefault()
+	}, {passive: false})
+
 </script>
+
+<svelte:head>
+	<title>Walkout</title>
+	<meta name="Walkout" content="GPS game" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+</svelte:head>
 
 <main>
 	<Map
