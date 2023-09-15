@@ -146,6 +146,8 @@
 	</Map>
 
 	<Ui>
+		<a href="/kikai" class="btn">KIKAI</a>
+
 		<div class="buildOptions dropdown">
 			{#each buildingTypes as buildingType}
 				<button
